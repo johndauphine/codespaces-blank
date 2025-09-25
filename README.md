@@ -28,6 +28,7 @@ Generate synthetic (fabricated) customer data for demos, prototypes, local analy
 - Rich, realistic-ish fields (identity, geo, lifecycle, value, risk)
 - Zero-record runs still emit a header-only CSV
 - Installable package with console script `customer-gen`
+- New: Synthetic patient data generation with `patient-gen` (non-PHI demo data)
 
 ## Installation
 
@@ -70,14 +71,32 @@ Backward compatible (legacy) invocation still works:
 python generate_customers.py --count 100 --output legacy.csv
 ```
 
+### Patient Data
+```bash
+patient-gen --count 50 --output patients.csv --seed 123
+```
+
+Patient fields include (subject to change / expansion):
+`patient_id, first_name, last_name, gender, date_of_birth, email, phone, street_address, city, state, postal_code, country, medical_record_number, insurance_provider, insurance_plan, primary_physician, blood_type, height_cm, weight_kg, bmi, smoking_status, chronic_conditions, allergies, medications_current, last_visit_date, next_appointment_date, risk_score, emergency_contact_name, emergency_contact_phone`
+
+Risk score is a synthetic 0–1 metric derived from age, BMI category, chronic condition count, smoking status, plus small noise.
+
+Disclaimer: All patient data is fully fabricated using random generators and should never be treated as real PHI.
+
 ## Programmatic Usage
 ```python
-from customer_data_generator import generate_customer_records, generate_customers_csv
+from customer_data_generator import (
+    generate_customer_records, generate_customers_csv,
+    generate_patient_records, generate_patients_csv
+)
 
 for rec in generate_customer_records(3, seed=123):
     print(rec)
 
 generate_customers_csv(50, "sample.csv", seed=99)
+
+patients = list(generate_patient_records(5, seed=42))
+generate_patients_csv(25, "patients.csv", seed=42)
 ```
 
 ## Output Schema

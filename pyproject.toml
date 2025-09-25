@@ -17,6 +17,7 @@ dev = [
 
 [project.scripts]
 customer-gen = "customer_data_generator.cli:main"
+patient-gen = "customer_data_generator.patient_cli:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]
