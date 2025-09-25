@@ -25,13 +25,16 @@ Generate synthetic (fabricated) customer data for demos, prototypes, local analy
 - Deterministic output via `--seed` (including stable customer_id values)
 - Adjustable record count (`--count`)
 - Locale support (`--locale`, default `en_US`)
-- Rich, realistic-ish fields (identity, geo, lifecycle, value, risk)
+## Features
+
+- Deterministic output via `--seed` (stable IDs for customers & patients)
+- Adjustable record count (`--count`)
+- Locale support (`--locale`, default `en_US`)
+- Rich, realistic-ish fields (identity, geo, lifecycle, value, risk, clinical-like attributes)
 - Zero-record runs still emit a header-only CSV
-- Installable package with console script `customer-gen`
-- New: Synthetic patient data generation with `patient-gen` (non-PHI demo data)
-
-## Installation
-
+- Installable package with console scripts: `customer-gen`, `patient-gen`
+- Unified zero-install wrapper script: `generate_data.py`
+- Synthetic patient data generation (`patient-gen`) — all data fabricated (non-PHI)
 ### Quick (ad‑hoc)
 ```bash
 pip install -r requirements.txt
@@ -55,6 +58,7 @@ Deterministic dataset (seed):
 ```bash
 customer-gen -c 250 --seed 42 -o customers_seed42.csv
 ```
+## CLI Usage (Installed)
 
 Different locale (UK addresses/names):
 ```bash
@@ -65,6 +69,13 @@ Header only (empty dataset):
 ```bash
 customer-gen -c 0 -o empty.csv
 ```
+## Zero-Install Wrapper
+If you clone the repository and prefer not to install the package, you can still generate data directly:
+```bash
+python generate_data.py customers --count 100 --seed 1 -o customers.csv
+python generate_data.py patients  --count 25  --seed 2 -o patients.csv
+```
+
 
 Backward compatible (legacy) invocation still works:
 ```bash
@@ -80,6 +91,8 @@ Patient fields include (subject to change / expansion):
 `patient_id, first_name, last_name, gender, date_of_birth, email, phone, street_address, city, state, postal_code, country, medical_record_number, insurance_provider, insurance_plan, primary_physician, blood_type, height_cm, weight_kg, bmi, smoking_status, chronic_conditions, allergies, medications_current, last_visit_date, next_appointment_date, risk_score, emergency_contact_name, emergency_contact_phone`
 
 Risk score is a synthetic 0–1 metric derived from age, BMI category, chronic condition count, smoking status, plus small noise.
+## Deprecated
+The legacy wrapper `generate_customers.py` is retained only for backward compatibility; prefer `generate_data.py` or the console scripts.
 
 Disclaimer: All patient data is fully fabricated using random generators and should never be treated as real PHI.
 
@@ -107,20 +120,14 @@ generate_patients_csv(25, "patients.csv", seed=42)
 | first_name / last_name | Fabricated personal names |
 | email | Derived email (not guaranteed globally unique) |
 | phone | Locale-specific phone number |
-| street_address / city / state / postal_code / country | Geographic info |
-| date_of_birth | YYYY-MM-DD (1940–2005) |
-| signup_date | ISO-8601 timestamp within last 5 years |
-| last_login | ISO-8601 timestamp after signup_date (unless early churn) |
 | is_active | Activity flag |
 | lifetime_value | Positive skewed float (Gamma distribution) |
 | segment | Enterprise / SMB / Consumer / Non-Profit / Education |
 | marketing_opt_in | ~60% True |
 | referral_source | Acquisition channel |
 | credit_score | 300–850 clipped normal |
-| churn_risk_score | 0–1 float (lower is better) |
 
 ## Testing
-```bash
 pytest -q
 ```
 
