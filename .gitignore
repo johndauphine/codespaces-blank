@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+*.log
+sample*.csv
+customers*.csv
+empty.csv
+.DS_Store

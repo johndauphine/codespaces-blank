@@ -1,0 +1,28 @@
+[project]
+name = "customer-data-generator"
+version = "0.2.0"
+description = "Synthetic customer data generator"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [ { name = "Your Name", email = "you@example.com" } ]
+requires-python = ">=3.9"
+dependencies = [
+    "faker>=25.0.0,<26.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0,<9.0.0",
+]
+
+[project.scripts]
+customer-gen = "customer_data_generator.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-ra"
+testpaths = ["tests"]

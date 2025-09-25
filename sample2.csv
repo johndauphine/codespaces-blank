@@ -1,3 +1,0 @@
-customer_id,first_name,last_name,email,phone,street_address,city,state,postal_code,country,date_of_birth,signup_date,last_login,is_active,lifetime_value,segment,marketing_opt_in,referral_source,credit_score,churn_risk_score
-253c84c4-7a4e-44c4-a101-c1483e128856,Lori,Davis,lori.davis@hotmail.com,3838016613,139 Barbara Locks,East Brandonberg,LA,55438,United States,1969-01-19,2025-06-22T17:13:10.060837,2025-06-27T07:28:52.891202,True,207.61,Consumer,False,Paid Search,701,0.388
-b19548be-dee4-4d8a-a6dc-76111ea77489,Evelyn,Garcia,evelyn.garcia@hotmail.com,+1-735-918-1909x3786,4323 Autumn Pine Suite 574,North Williamburgh,WV,45334,United States,1952-12-09,2023-06-10T14:45:30.430708,2024-09-22T05:59:27.197606,True,156.86,Consumer,True,Referral,665,0.343
