@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import argparse
 import sys
+import subprocess
+import importlib
 from pathlib import Path
 
 
@@ -23,6 +25,47 @@ def _ensure_src_on_path() -> None:
 
 
 _ensure_src_on_path()
+
+
+def _bootstrap_dependencies() -> None:
+    """Attempt to ensure required runtime dependency (faker) is available.
+
+    This avoids forcing the user to install pip first in very minimal Python environments.
+    If installation fails, we surface a friendly message and exit.
+    """
+    try:
+        importlib.import_module("faker")
+        return  # already present
+    except ImportError:
+        pass
+
+    print("Dependency 'faker' not found. Attempting lightweight installation...", file=sys.stderr)
+    # Try ensurepip (may be unavailable in some distros if removed by vendor)
+    try:
+        import ensurepip  # type: ignore
+        ensurepip.bootstrap()
+    except Exception as e:  # pragma: no cover
+        print(f"Warning: ensurepip failed or unavailable ({e}). Continuing to try pip anyway.", file=sys.stderr)
+
+    python_exec = sys.executable
+    try:
+        subprocess.check_call([python_exec, "-m", "pip", "install", "faker>=25.0.0,<26.0.0"], stdout=subprocess.DEVNULL)
+    except Exception as e:  # pragma: no cover
+        print("Automatic install failed.", file=sys.stderr)
+        print("Please install dependencies manually, e.g.:", file=sys.stderr)
+        print("  python -m ensurepip --upgrade  # if pip missing", file=sys.stderr)
+        print("  python -m pip install -r requirements.txt", file=sys.stderr)
+        print(f"Underlying error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        importlib.import_module("faker")
+    except ImportError:  # pragma: no cover
+        print("Installation reported success but 'faker' still not importable.", file=sys.stderr)
+        sys.exit(1)
+
+
+_bootstrap_dependencies()
 
 try:
     from customer_data_generator import (

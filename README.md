@@ -76,6 +76,47 @@ python generate_data.py customers --count 100 --seed 1 -o customers.csv
 python generate_data.py patients  --count 25  --seed 2 -o patients.csv
 ```
 
+### Ultra-Simple One-File Script
+If you just want a single script without subcommands, use `simple_data_gen.py`:
+```bash
+python simple_data_gen.py customers 100 customers.csv --seed 42
+python simple_data_gen.py patients 50 patients.csv
+python simple_data_gen.py both 250 output_dir --seed 7 --prefix demo_
+python simple_data_gen.py            # defaults: customers 100 -> customers.csv
+```
+Outputs when mode is `both`:
+```
+output_dir/
+    demo_customers.csv
+    demo_patients.csv
+```
+Arguments (positional):
+1. mode: customers | patients | both
+2. count: number of records (each, for both)
+3. output: CSV path (single mode) or directory (both mode)
+
+Common flags:
+--seed <int>  Deterministic IDs
+--locale <str> Faker locale (default en_US)
+--prefix <str> Prefix used only in 'both' mode
+
+This script is intentionally minimal; for richer CLI features (subparsers, help text) see `generate_data.py`.
+
+### Dependency Bootstrapping (No pip scenario)
+`generate_data.py` will attempt to auto-install the runtime dependency `faker` if it's missing by:
+1. Trying `ensurepip.bootstrap()` to provision pip in stripped environments.
+2. Running `python -m pip install faker` silently.
+
+If this fails, install manually:
+```bash
+python -m ensurepip --upgrade   # if pip not present
+python -m pip install -r requirements.txt
+```
+Or (development extras):
+```bash
+python -m pip install -e .[dev]
+```
+
 
 Backward compatible (legacy) invocation still works:
 ```bash
