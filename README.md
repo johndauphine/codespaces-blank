@@ -2,6 +2,37 @@
 
 Generate synthetic (fabricated) customer data for demos, prototypes, local analytics, load/performance tests, or teaching examples.
 
+## PostgreSQL table copy CLI
+
+This repo also includes a simple CLI to copy tables between PostgreSQL databases using fast binary COPY.
+
+Install dependencies (in your virtualenv):
+
+```
+pip install -r requirements.txt
+```
+
+Run the CLI via the console script:
+
+```
+pg-copy-tables \
+    --src-host localhost --src-port 5432 --src-user user --src-password pass --src-db srcdb \
+    --dst-host localhost --dst-port 5432 --dst-user user --dst-password pass --dst-db dstdb \
+    --include public.my_table,public.other_table --truncate
+```
+
+Environment variable defaults are supported for brevity:
+
+- SRC_PGHOST, SRC_PGPORT, SRC_PGUSER, SRC_PGPASSWORD, SRC_PGDATABASE
+- DST_PGHOST, DST_PGPORT, DST_PGUSER, DST_PGPASSWORD, DST_PGDATABASE
+
+Flags:
+
+- --include: comma-separated list of schema.table to copy (if omitted, copies all non-system tables)
+- --exclude: comma-separated list to skip
+- --truncate: truncate destination table before copy
+- --no-create: do not create destination table if it doesn't exist (default is to create)
+
 ## Project Structure
 
 ```
